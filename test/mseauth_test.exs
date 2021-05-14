@@ -1,8 +1,35 @@
 defmodule MseauthTest do
-  use ExUnit.Case
-  doctest Mseauth
+  use ExUnit.Case, async: true
+  use Plug.Test
+  use MseauthTest.RepoCase
 
-  test "greets the world" do
-    assert Mseauth.hello() == :world
+  alias Mseauth.Server
+
+  @opts Server.init([])
+
+  test "normal case" do
+    conn =
+      conn(:post, "/register", %{identifier: "mopp", password: "yomogi"})
+      |> put_req_header("content-type", "application/json")
+      |> Server.call(@opts)
+
+    assert conn.state == :sent
+    assert conn.status == 200
+    assert conn.resp_body == ""
   end
+
+  # test "whole use case" do
+  #   :ok = Mseauth.register(identifier, password)
+  #   {identifier, access_token, refresh_token} = Mseauth.authenticate(identifier, password)
+  #
+  #   :ok = Mseauth.validate(access_token)
+  #
+  #   {access_token, refresh_token} = Mseauth.refresh(refresh_token)
+  #
+  #   :ok = Mseauth.expire(access_token)
+  #
+  #   :ok = Mseauth.change_password(identifier, current_password, new_password)
+  #
+  #   :ok = Mseauth.withdraw(identifier, password)
+  # end
 end
