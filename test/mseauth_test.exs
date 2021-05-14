@@ -16,6 +16,20 @@ defmodule MseauthTest do
     assert conn.state == :sent
     assert conn.status == 200
     assert conn.resp_body == ""
+
+    conn =
+      conn(:post, "/validate", %{identifier: "mopp", password: "yomogi"})
+      |> put_req_header("content-type", "application/json")
+      |> Server.call(@opts)
+
+    assert conn.state == :sent
+    assert conn.status == 200
+
+    assert %{
+             "identifier" => "mopp",
+             "access_token" => _,
+             "refresh_token" => _
+           } = Jason.decode!(conn.resp_body)
   end
 
   # test "whole use case" do

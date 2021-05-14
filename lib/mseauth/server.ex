@@ -1,5 +1,6 @@
 defmodule Mseauth.Server do
   use Plug.Router
+
   use Plug.ErrorHandler
 
   alias Mseauth.Authenticator
@@ -27,13 +28,24 @@ defmodule Mseauth.Server do
     end
   end
 
-  get "/validate" do
+  post "/validate" do
     with %{
            "identifier" => identifier,
            "password" => password
          } <- conn.body_params do
-      :ok = Authenticator.register(identifier, password)
-      send_resp(conn, 200, "")
+      {:ok, {identifier, access_token, refresh_token}} =
+        Authenticator.validate(identifier, password)
+
+      conn
+      |> put_resp_header("content-type", "application/json")
+      |> send_resp(
+        200,
+        Jason.encode!(%{
+          identifier: identifier,
+          access_token: access_token,
+          refresh_token: refresh_token
+        })
+      )
     else
       _ ->
         send_resp(conn, 400, "error")
