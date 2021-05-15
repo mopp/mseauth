@@ -26,9 +26,10 @@ defmodule Mseauth.Session.Worker do
   def handle_continue(_, %{user_id: user_id} = state) do
     sessions =
       Session
+      |> preload([:access_token, :refresh_token])
       |> where([session], session.user_id == ^user_id)
       |> select([user], user)
-      |> Repo.all(preload: [AccessToken, RefreshToken])
+      |> Repo.all()
 
     # TODO: Shutdown after few minutes automatically.
 
