@@ -5,4 +5,4 @@ config :mseauth, Mseauth.Repo,
   username: "mopp",
   password: "mopp123",
   hostname: "postgres",
-  pool: Ecto.Adapters.SQL.Sandbox
+  port: "5432"
