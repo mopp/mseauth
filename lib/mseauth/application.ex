@@ -9,8 +9,8 @@ defmodule Mseauth.Application do
   def start(_type, _args) do
     children = [
       Mseauth.Repo,
-      {Plug.Cowboy, scheme: :http, plug: Mseauth.Server},
-      {DynamicSupervisor, strategy: :one_for_one, name: Mseauth.SessionSupervisor}
+      Mseauth.Session.Supervisor,
+      {Plug.Cowboy, scheme: :http, plug: Mseauth.Server}
     ]
 
     opts = [strategy: :one_for_one, name: Mseauth.Supervisor]

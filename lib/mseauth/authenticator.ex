@@ -2,10 +2,8 @@ defmodule Mseauth.Authenticator do
   import Ecto.Query
 
   alias Mseauth.Repo
-  alias Mseauth.Repo.AccessToken
-  alias Mseauth.Repo.Session
-  alias Mseauth.Repo.RefreshToken
   alias Mseauth.Repo.User
+  alias Mseauth.Session
 
   def register(auth_id, password) do
     # TODO: Hash the given password.
@@ -25,34 +23,21 @@ defmodule Mseauth.Authenticator do
       |> select([user], user)
       |> Repo.one!()
 
-    Repo.transaction(fn ->
-      {:ok, access_token} =
-        %AccessToken{
-          expired_at:
-            NaiveDateTime.utc_now()
-            |> NaiveDateTime.add(120 * 60)
-            |> NaiveDateTime.truncate(:second)
-        }
-        |> Repo.insert()
+    {:ok, {access_token, refresh_token}} = start_session(user)
 
-      {:ok, refresh_token} =
-        %RefreshToken{
-          expired_at:
-            NaiveDateTime.utc_now()
-            |> NaiveDateTime.add(240 * 60)
-            |> NaiveDateTime.truncate(:second)
-        }
-        |> Repo.insert()
+    {:ok, {user.id, access_token.id, refresh_token.id}}
+  end
 
-      %Session{
-        user_id: user.id,
-        access_token_id: access_token.id,
-        refresh_token_id: refresh_token.id
-      }
-      |> Session.changeset()
-      |> Repo.insert!()
+  defp start_session(user) do
+    pid =
+      case Session.Supervisor.start_child(user.id) do
+        {:ok, pid} ->
+          pid
 
-      {user.id, access_token.id, refresh_token.id}
-    end)
+        {:error, {:already_started, pid}} ->
+          pid
+      end
+
+    Session.Worker.start_session(pid)
   end
 end
