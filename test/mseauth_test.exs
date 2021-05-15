@@ -18,7 +18,7 @@ defmodule MseauthTest do
     assert conn.resp_body == ""
 
     conn =
-      conn(:post, "/validate", %{identifier: "mopp", password: "yomogi"})
+      conn(:post, "/authenticate", %{identifier: "mopp", password: "yomogi"})
       |> put_req_header("content-type", "application/json")
       |> Server.call(@opts)
 

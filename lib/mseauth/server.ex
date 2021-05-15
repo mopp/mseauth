@@ -28,13 +28,13 @@ defmodule Mseauth.Server do
     end
   end
 
-  post "/validate" do
+  post "/authenticate" do
     with %{
            "identifier" => identifier,
            "password" => password
          } <- conn.body_params do
       {:ok, {identifier, access_token, refresh_token}} =
-        Authenticator.validate(identifier, password)
+        Authenticator.authenticate(identifier, password)
 
       conn
       |> put_resp_header("content-type", "application/json")

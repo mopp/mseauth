@@ -17,7 +17,7 @@ defmodule Mseauth.Authenticator do
     :ok
   end
 
-  def validate(auth_id, password) do
+  def authenticate(auth_id, password) do
     user =
       User
       |> where([user], user.auth_id == ^auth_id)
