@@ -26,7 +26,7 @@ defmodule MseauthTest do
     assert conn.status == 200
 
     assert %{
-             "identifier" => "mopp",
+             "identifier" => _,
              "access_token" => _,
              "refresh_token" => _
            } = Jason.decode!(conn.resp_body)

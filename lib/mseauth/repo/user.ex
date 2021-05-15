@@ -5,8 +5,11 @@ defmodule Mseauth.Repo.User do
 
   alias Mseauth.Repo.Session
 
+  @primary_key {:id, Ecto.UUID, autogenerate: true}
+  @foreign_key_type Ecto.UUID
+
   schema "users" do
-    field(:identifier, :string)
+    field(:auth_id, :string)
     field(:password, :string)
     has_many(:sessions, Session)
 
@@ -15,7 +18,7 @@ defmodule Mseauth.Repo.User do
 
   def changeset(user, params \\ %{}) do
     user
-    |> cast(params, [:identifier, :password])
-    |> validate_required([:identifier, :password])
+    |> cast(params, [:auth_id, :password])
+    |> validate_required([:auth_id, :password])
   end
 end
