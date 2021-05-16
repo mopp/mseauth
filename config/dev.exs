@@ -1,7 +1,7 @@
 import Config
 
 config :mseauth, Mseauth.Repo,
-  database: "mseauth_local",
+  database: "mseauth_dev",
   username: "mopp",
   password: "mopp123",
   hostname: "localhost",
