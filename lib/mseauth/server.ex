@@ -65,6 +65,9 @@ defmodule Mseauth.Server do
            refresh_token: %{value: refresh_token.id, expired_at: refresh_token.expired_at}
          }}
       else
+        {:error, :authentication_failed} ->
+          {401, %{status: :failed, reason: "Authentication failed."}}
+
         _ ->
           {400, %{status: :error, reason: "invalid request"}}
       end

@@ -1,16 +1,35 @@
 defmodule Mseauth.Session do
-  import Ecto.Query
-
-  use GenServer
-
   alias Mseauth.Repo
   alias Mseauth.Repo.AccessToken
   alias Mseauth.Repo.RefreshToken
 
-  def start(user) do
-    {access_token, refresh_token, session} = create_session(user.id)
+  def start(_user) do
+    # TODO: Bind the user to the tokens.
+    {:ok, {access_token, refresh_token}} =
+      Repo.transaction(fn ->
+        {:ok, access_token} =
+          %AccessToken{
+            expired_at:
+              NaiveDateTime.utc_now()
+              |> NaiveDateTime.add(120 * 60)
+              |> NaiveDateTime.truncate(:second)
+          }
+          |> Repo.insert()
+
+        {:ok, refresh_token} =
+          %RefreshToken{
+            expired_at:
+              NaiveDateTime.utc_now()
+              |> NaiveDateTime.add(240 * 60)
+              |> NaiveDateTime.truncate(:second)
+          }
+          |> Repo.insert()
+
+        {access_token, refresh_token}
+      end)
 
     {:ok, {access_token, refresh_token}}
+
     # {:ok, pid} = Session.RefreshTokenWorker.start(refresh_token)
     # {:ok, pid} = Session.AccessTokenWorker.start(refresh_token, pid)
 
@@ -21,7 +40,7 @@ defmodule Mseauth.Session do
     # return access_token and refresh_token with their expired_at.
   end
 
-  def validate(access_token) do
+  def validate(_access_token) do
     # if process_exists do
     #   check expired_at
     # else
@@ -38,7 +57,7 @@ defmodule Mseauth.Session do
     {:ok, "identifier"}
   end
 
-  def refresh(refresh_token) do
+  def refresh(_refresh_token) do
     # if process_exists do
     #   # kill old access_token
     #   # create_new_access_token
@@ -56,42 +75,9 @@ defmodule Mseauth.Session do
     {:ok, "access_token"}
   end
 
-  def expire(access_token) do
+  def expire(_access_token) do
     # remove them from DB.
     # kill refresh_token (and access_token) processes
     :ok
-  end
-
-  defp create_session(user_id) do
-    Repo.transaction(fn ->
-      {:ok, access_token} =
-        %AccessToken{
-          expired_at:
-            NaiveDateTime.utc_now()
-            |> NaiveDateTime.add(120 * 60)
-            |> NaiveDateTime.truncate(:second)
-        }
-        |> Repo.insert()
-
-      {:ok, refresh_token} =
-        %RefreshToken{
-          expired_at:
-            NaiveDateTime.utc_now()
-            |> NaiveDateTime.add(240 * 60)
-            |> NaiveDateTime.truncate(:second)
-        }
-        |> Repo.insert()
-
-      session =
-        %Repo.Session{
-          user_id: user_id,
-          access_token_id: access_token.id,
-          refresh_token_id: refresh_token.id
-        }
-        |> Repo.Session.changeset()
-        |> Repo.insert!()
-
-      {access_token, refresh_token, session}
-    end)
   end
 end

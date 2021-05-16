@@ -15,11 +15,17 @@ defmodule Mseauth.Authentication do
   end
 
   def authenticate(auth_id, password) do
-    User
-    |> where([user], user.auth_id == ^auth_id)
-    |> where([user], user.password == ^password)
-    |> select([user], user)
-    |> Repo.one()
+    user =
+      User
+      |> where([user], user.auth_id == ^auth_id and user.password == ^password)
+      |> select([user], user)
+      |> Repo.one()
+
+    if user == nil do
+      {:error, :authentication_failed}
+    else
+      {:ok, user}
+    end
   end
 
   def change_password(auth_id, old_password, new_password) do
