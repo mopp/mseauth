@@ -27,6 +27,7 @@ defmodule Mseauth.MixProject do
     [
       {:ecto_sql, "~> 3.6"},
       {:jason, "~> 1.2"},
+      {:libcluster, "~> 3.3"},
       {:plug_cowboy, "~> 2.0"},
       {:postgrex, "~> 0.15.9"}
     ]

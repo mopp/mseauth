@@ -14,6 +14,11 @@ defmodule Mseauth.Application do
     {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :up, all: true))
 
     children = [
+      {Cluster.Supervisor,
+       [
+         Application.fetch_env!(:libcluster, :topologies),
+         [name: Mseauth.ClusterSupervisor]
+       ]},
       Mseauth.Repo,
       Mseauth.Session.Supervisor,
       {Plug.Cowboy, scheme: :http, plug: Mseauth.Server}
