@@ -6,8 +6,22 @@ services:
       context: .
     environment:
       RELEASE_COOKIE: 'GXFWRIRSHFIZQQDBSYLA'
-    ports:
-      - "4000:4000"
+    depends_on:
+      - postgres
+
+  mseauth2:
+    build:
+      context: .
+    environment:
+      RELEASE_COOKIE: 'GXFWRIRSHFIZQQDBSYLA'
+    depends_on:
+      - postgres
+
+  mseauth3:
+    build:
+      context: .
+    environment:
+      RELEASE_COOKIE: 'GXFWRIRSHFIZQQDBSYLA'
     depends_on:
       - postgres
 
@@ -22,6 +36,13 @@ services:
       - "5432:5432"
     volumes:
       - db:/var/lib/postgresql/data
+
+  envoy:
+    image: envoyproxy/envoy:v1.18.3
+    volumes:
+      - ./envoy:/etc/envoy/
+    ports:
+      - 8080:80
 
 volumes:
   db:
