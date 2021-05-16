@@ -17,7 +17,7 @@ defmodule Mseauth.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
+      extra_applications: [:logger, :libring],
       mod: {Mseauth.Application, []}
     ]
   end
@@ -28,6 +28,7 @@ defmodule Mseauth.MixProject do
       {:ecto_sql, "~> 3.6"},
       {:jason, "~> 1.2"},
       {:libcluster, "~> 3.3"},
+      {:libring, "~> 1.5"},
       {:plug_cowboy, "~> 2.0"},
       {:postgrex, "~> 0.15.9"}
     ]

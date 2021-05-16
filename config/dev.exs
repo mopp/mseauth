@@ -9,3 +9,8 @@ config :mseauth, Mseauth.Repo,
 
 config :libcluster,
   topologies: []
+
+config :libring,
+  rings: [
+    main: [monitor_nodes: true, node_blacklist: [~r/^remsh.*$/]]
+  ]

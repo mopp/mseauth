@@ -14,3 +14,8 @@ config :libcluster,
       config: [hosts: [:alpha@mseauth1, :bravo@mseauth2, :charlie@mseauth3]]
     ]
   ]
+
+config :libring,
+  rings: [
+    main: [monitor_nodes: true, node_blacklist: [~r/^remsh.*$/]]
+  ]
