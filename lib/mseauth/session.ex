@@ -73,6 +73,7 @@ defmodule Mseauth.Session do
     case RefreshToken
          |> where([refresh_token], refresh_token.id == ^refresh_token_id)
          |> select([refresh_token], refresh_token)
+         |> preload(:access_token)
          |> Repo.one() do
       nil ->
         {:error, :not_found}

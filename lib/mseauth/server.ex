@@ -78,7 +78,7 @@ defmodule Mseauth.Server do
   post "/validate" do
     {status, params} =
       with %{"access_token" => access_token} <- conn.body_params,
-           {:ok, identifier} = Session.validate(access_token) do
+           {:ok, identifier} <- Session.validate(access_token) do
         {200,
          %{
            status: :succeeded,
@@ -98,8 +98,8 @@ defmodule Mseauth.Server do
   put "/refresh" do
     {status, params} =
       with %{"refresh_token" => refresh_token} <- conn.body_params,
-           {:ok, access_token} = Session.refresh(refresh_token) do
-        {200,
+           {:ok, access_token} <- Session.refresh(refresh_token) do
+        {201,
          %{
            status: :succeeded,
            access_token: %{value: access_token.id, expired_at: access_token.expired_at}
@@ -118,7 +118,7 @@ defmodule Mseauth.Server do
   put "/expire" do
     {status, params} =
       with %{"access_token" => access_token} <- conn.body_params,
-           :ok = Session.expire(access_token) do
+           :ok <- Session.expire(access_token) do
         {200, %{status: :succeeded}}
       else
         _ ->

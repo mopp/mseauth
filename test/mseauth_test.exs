@@ -42,6 +42,38 @@ defmodule MseauthTest do
     assert conn.state == :sent
     assert conn.status == 200
     assert %{"identifier" => _} = Jason.decode!(conn.resp_body)
+
+    Mseauth.Session.AccessTokenWorker.expire(access_token)
+
+    params = %{access_token: access_token}
+    conn = send_json_req(:post, "/validate", params)
+
+    assert conn.state == :sent
+    assert conn.status == 200
+    assert %{"identifier" => _} = Jason.decode!(conn.resp_body)
+
+    params = %{refresh_token: refresh_token}
+    conn = send_json_req(:put, "/refresh", params)
+
+    assert conn.state == :sent
+    assert conn.status == 201
+    assert %{"access_token" => %{"value" => new_access_token}} = Jason.decode!(conn.resp_body)
+
+    # Test new access_token is valid.
+    params = %{access_token: new_access_token}
+    conn = send_json_req(:post, "/validate", params)
+
+    assert conn.state == :sent
+    assert conn.status == 200
+    assert %{"identifier" => _} = Jason.decode!(conn.resp_body)
+
+    # Test old access_token is invalid.
+    params = %{access_token: access_token}
+    conn = send_json_req(:post, "/validate", params)
+
+    assert conn.state == :sent
+    assert conn.status == 200
+    assert %{"status" => "failed"} = Jason.decode!(conn.resp_body)
   end
 
   defp send_json_req(method, path, params) do
