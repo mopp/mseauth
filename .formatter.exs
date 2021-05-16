@@ -1,5 +1,5 @@
 # Used by "mix format"
 [
   inputs: ["{mix,.formatter}.exs", "{config,lib,test}/**/*.{ex,exs}"],
-  import_deps: [:plug_cowboy, :ecto_sql]
+  import_deps: [:plug, :ecto_sql]
 ]

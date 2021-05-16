@@ -1,20 +1,18 @@
 defmodule Mseauth.Server do
   use Plug.Router
-
   use Plug.ErrorHandler
 
   alias Mseauth.Authentication
   alias Mseauth.Session
 
-  plug(:match)
+  plug :match
 
-  plug(Plug.Parsers,
+  plug Plug.Parsers,
     parsers: [:json],
     pass: ["application/json"],
     json_decoder: Jason
-  )
 
-  plug(:dispatch)
+  plug :dispatch
 
   post "/register" do
     {status, params} =
