@@ -2,6 +2,8 @@ defmodule Mseauth.Server do
   use Plug.Router
   use Plug.ErrorHandler
 
+  require Logger
+
   alias Mseauth.Authentication
   alias Mseauth.Session
 
@@ -148,7 +150,8 @@ defmodule Mseauth.Server do
     send_resp(conn, 404, "oops")
   end
 
-  defp handle_errors(conn, %{kind: _kind, reason: _reason, stack: _stack}) do
+  defp handle_errors(conn, %{kind: _kind, reason: _reason, stack: _stack} = info) do
+    Logger.error(inspect(info))
     send_resp(conn, conn.status, "Something went wrong")
   end
 
