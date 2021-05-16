@@ -74,6 +74,15 @@ defmodule MseauthTest do
     assert conn.state == :sent
     assert conn.status == 200
     assert %{"status" => "failed"} = Jason.decode!(conn.resp_body)
+
+    # Test not existing access_token is invalid.
+    # TODO: fix this case.
+    # params = %{access_token: "not existing access token"}
+    # conn = send_json_req(:post, "/validate", params)
+    #
+    # assert conn.state == :sent
+    # assert conn.status == 200
+    # assert %{"status" => "failed"} = Jason.decode!(conn.resp_body)
   end
 
   defp send_json_req(method, path, params) do
