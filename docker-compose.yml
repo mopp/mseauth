@@ -5,28 +5,37 @@ services:
     build:
       context: .
     environment:
+      MIX_ENV: local
       RELEASE_COOKIE: 'GXFWRIRSHFIZQQDBSYLA'
       RELEASE_NODE: alpha@mseauth
     depends_on:
       - postgres
+    volumes:
+      - .:/mseauth
 
   mseauth2:
     build:
       context: .
     environment:
+      MIX_ENV: local
       RELEASE_COOKIE: 'GXFWRIRSHFIZQQDBSYLA'
       RELEASE_NODE: bravo@mseauth
     depends_on:
       - postgres
+    volumes:
+      - .:/mseauth
 
   mseauth3:
     build:
       context: .
     environment:
+      MIX_ENV: local
       RELEASE_COOKIE: 'GXFWRIRSHFIZQQDBSYLA'
       RELEASE_NODE: charlie@mseauth
     depends_on:
       - postgres
+    volumes:
+      - .:/mseauth
 
   postgres:
     image: postgres:13.2
