@@ -5,6 +5,7 @@ defmodule Mseauth.Server do
   alias Mseauth.Authentication
   alias Mseauth.Session
 
+  plug Plug.Logger, log: :debug
   plug :match
 
   plug Plug.Parsers,
