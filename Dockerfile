@@ -1,4 +1,4 @@
-FROM elixir:latest
+FROM elixir:1.11.4
 
 RUN apt-get update
 RUN mix local.hex --force
