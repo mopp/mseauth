@@ -6,3 +6,6 @@ config :mseauth, Mseauth.Repo,
   password: "mopp123",
   hostname: "localhost",
   port: "5432"
+
+config :libcluster,
+  topologies: []
