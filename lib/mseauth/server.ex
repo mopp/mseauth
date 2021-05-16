@@ -117,8 +117,8 @@ defmodule Mseauth.Server do
 
   put "/expire" do
     {status, params} =
-      with %{"access_token" => access_token} <- conn.body_params,
-           :ok <- Session.expire(access_token) do
+      with %{"refresh_token" => refresh_token} <- conn.body_params,
+           :ok <- Session.expire(refresh_token) do
         {200, %{status: :succeeded}}
       else
         _ ->

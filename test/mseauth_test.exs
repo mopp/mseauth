@@ -83,6 +83,13 @@ defmodule MseauthTest do
     # assert conn.state == :sent
     # assert conn.status == 200
     # assert %{"status" => "failed"} = Jason.decode!(conn.resp_body)
+
+    params = %{refresh_token: refresh_token}
+    conn = send_json_req(:put, "/expire", params)
+
+    assert conn.state == :sent
+    assert conn.status == 200
+    assert %{"status" => "succeeded"} = Jason.decode!(conn.resp_body)
   end
 
   defp send_json_req(method, path, params) do
