@@ -11,6 +11,6 @@ config :libcluster,
   topologies: [
     default: [
       strategy: Cluster.Strategy.Epmd,
-      config: [hosts: [:alpha@mseauth, :bravo@mseauth, :charlie@mseauth]]
+      config: [hosts: [:alpha@mseauth1, :bravo@mseauth2, :charlie@mseauth3]]
     ]
   ]

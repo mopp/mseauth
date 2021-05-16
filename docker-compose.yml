@@ -7,7 +7,7 @@ services:
     environment:
       MIX_ENV: local
       RELEASE_COOKIE: 'GXFWRIRSHFIZQQDBSYLA'
-      RELEASE_NODE: alpha@mseauth
+      RELEASE_NODE: alpha@mseauth1
     depends_on:
       - postgres
     volumes:
@@ -19,7 +19,7 @@ services:
     environment:
       MIX_ENV: local
       RELEASE_COOKIE: 'GXFWRIRSHFIZQQDBSYLA'
-      RELEASE_NODE: bravo@mseauth
+      RELEASE_NODE: bravo@mseauth2
     depends_on:
       - postgres
     volumes:
@@ -31,7 +31,7 @@ services:
     environment:
       MIX_ENV: local
       RELEASE_COOKIE: 'GXFWRIRSHFIZQQDBSYLA'
-      RELEASE_NODE: charlie@mseauth
+      RELEASE_NODE: charlie@mseauth3
     depends_on:
       - postgres
     volumes:
