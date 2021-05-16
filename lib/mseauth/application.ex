@@ -9,6 +9,10 @@ defmodule Mseauth.Application do
   def start(_type, _args) do
     Logger.info("Start application.")
 
+    # Migrate database.
+    [repo] = Application.fetch_env!(:mseauth, :ecto_repos)
+    {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :up, all: true))
+
     children = [
       Mseauth.Repo,
       Mseauth.Session.Supervisor,
