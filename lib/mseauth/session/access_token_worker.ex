@@ -1,11 +1,18 @@
 defmodule Mseauth.Session.AccessTokenWorker do
   use GenServer
 
+  alias Mseauth.Session
+
   def start(access_token) do
     node = HashRing.Managed.key_to_node(:main, access_token.id)
+
     Node.spawn(node, fn ->
-      GenServer.start(__MODULE__, access_token, name: {:global, access_token.id})
+      Session.Supervisor.start_child(__MODULE__, access_token)
     end)
+  end
+
+  def start_link(access_token) do
+    GenServer.start(__MODULE__, access_token, name: {:global, access_token.id})
   end
 
   def fetch(access_token_id) do

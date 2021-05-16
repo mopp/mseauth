@@ -5,7 +5,7 @@ defmodule Mseauth.Session.Supervisor do
     DynamicSupervisor.start_link(__MODULE__, args, name: __MODULE__)
   end
 
-  def start_worker(module, args) do
+  def start_child(module, args) do
     DynamicSupervisor.start_child(__MODULE__, {module, args})
   end
 
