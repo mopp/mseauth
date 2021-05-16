@@ -24,9 +24,11 @@ defmodule Mseauth.Repo.Migrations.Init do
       add :id, :uuid, primary_key: true
       add :expired_at, :naive_datetime, null: false # TODO: Use datetime with timezone.
       add :user_id, references("users", type: :uuid, on_delete: :delete_all), null: false
+      add :access_token_id, references("access_tokens", type: :uuid), null: false
 
       timestamps()
     end
     create index("refresh_tokens", [:user_id])
+    create index("refresh_tokens", [:access_token_id])
   end
 end
