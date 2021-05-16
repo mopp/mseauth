@@ -21,7 +21,7 @@ defmodule Mseauth.Application do
        ]},
       Mseauth.Repo,
       Mseauth.Session.Supervisor,
-      {Plug.Cowboy, scheme: :http, plug: Mseauth.Server}
+      {Plug.Cowboy, scheme: :http, plug: Mseauth.Server, port: 8080}
     ]
 
     opts = [strategy: :one_for_one, name: Mseauth.Supervisor]
