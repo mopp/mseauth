@@ -97,19 +97,4 @@ defmodule MseauthTest do
     |> put_req_header("content-type", "application/json")
     |> Server.call(@opts)
   end
-
-  # test "whole use case" do
-  #   :ok = Mseauth.register(identifier, password)
-  #   {identifier, access_token, refresh_token} = Mseauth.authenticate(identifier, password)
-  #
-  #   :ok = Mseauth.validate(access_token)
-  #
-  #   {access_token, refresh_token} = Mseauth.refresh(refresh_token)
-  #
-  #   :ok = Mseauth.expire(access_token)
-  #
-  #   :ok = Mseauth.change_password(identifier, current_password, new_password)
-  #
-  #   :ok = Mseauth.withdraw(identifier, password)
-  # end
 end
