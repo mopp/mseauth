@@ -7,6 +7,8 @@ defmodule Mseauth.Application do
 
   @impl true
   def start(_type, _args) do
+    Logger.info("Start application.")
+
     children = [
       Mseauth.Repo,
       Mseauth.Session.Supervisor,
