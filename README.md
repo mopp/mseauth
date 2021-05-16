@@ -15,6 +15,7 @@ iex -S mix
 ```console
 > docker-compose build
 > docker-compose run --rm --service-ports mseauth1 mix release --overwrite
+> docker-compose run --rm --service-ports mseauth1 mix ecto.create 
 > docker-compose up
 
 > curl -X POST -H "Content-Type: application/json" http://0.0.0.0:8080/register -d '{"identifier": "mopp", "password": "lgtm"}'
@@ -26,6 +27,8 @@ _token":{"expired_at":"2021-05-16T18:58:04","value":"c22cd5bf-bf18-49d4-8999-2b4
 
 > curl -X POST -H "Content-Type: application/json" http://0.0.0.0:8080/validate -d '{"access_token": "77a2c4a3-48f9-421a-ab2c-87cfafc3690f"}'
 {"identifier":"f87bd5f4-bf1b-467c-a515-b6678dc9be25","status":"succeeded"}%
+
+> mix end_to_end_test
 ```
 
 Clean up the database.

@@ -26,6 +26,7 @@ defmodule Mseauth.MixProject do
   defp deps do
     [
       {:ecto_sql, "~> 3.6"},
+      {:httpoison, "~> 1.8", runtime: false},
       {:jason, "~> 1.2"},
       {:libcluster, "~> 3.3"},
       {:libring, "~> 1.5"},
