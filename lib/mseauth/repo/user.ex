@@ -3,7 +3,8 @@ defmodule Mseauth.Repo.User do
 
   import Ecto.Changeset
 
-  alias Mseauth.Repo.Session
+  alias Mseauth.Repo.AccessToken
+  alias Mseauth.Repo.RefreshToken
 
   @primary_key {:id, Ecto.UUID, autogenerate: true}
   @foreign_key_type Ecto.UUID
@@ -11,7 +12,8 @@ defmodule Mseauth.Repo.User do
   schema "users" do
     field(:auth_id, :string)
     field(:password, :string)
-    has_many(:sessions, Session)
+    has_many(:access_tokens, AccessToken)
+    has_many(:refresh_tokens, RefreshToken)
 
     timestamps()
   end

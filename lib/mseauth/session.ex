@@ -3,26 +3,29 @@ defmodule Mseauth.Session do
   alias Mseauth.Repo.AccessToken
   alias Mseauth.Repo.RefreshToken
 
-  def start(_user) do
-    # TODO: Bind the user to the tokens.
+  def start(user) do
     {:ok, {access_token, refresh_token}} =
       Repo.transaction(fn ->
         {:ok, access_token} =
           %AccessToken{
+            user_id: user.id,
             expired_at:
               NaiveDateTime.utc_now()
               |> NaiveDateTime.add(120 * 60)
               |> NaiveDateTime.truncate(:second)
           }
+          |> AccessToken.changeset()
           |> Repo.insert()
 
         {:ok, refresh_token} =
           %RefreshToken{
+            user_id: user.id,
             expired_at:
               NaiveDateTime.utc_now()
               |> NaiveDateTime.add(240 * 60)
               |> NaiveDateTime.truncate(:second)
           }
+          |> RefreshToken.changeset()
           |> Repo.insert()
 
         {access_token, refresh_token}

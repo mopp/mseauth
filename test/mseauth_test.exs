@@ -5,6 +5,8 @@ defmodule MseauthTest do
 
   alias Mseauth.Repo
   alias Mseauth.Repo.User
+  alias Mseauth.Repo.AccessToken
+  alias Mseauth.Repo.RefreshToken
   alias Mseauth.Server
 
   @opts Server.init([])
@@ -26,10 +28,13 @@ defmodule MseauthTest do
     assert 200 == conn.status
 
     assert %{
-             "identifier" => _,
-             "access_token" => access_token,
-             "refresh_token" => _refresh_token
+             "identifier" => identifier,
+             "access_token" => %{"value" => access_token, "expired_at" => _},
+             "refresh_token" => %{"value" => refresh_token, "expired_at" => _}
            } = Jason.decode!(conn.resp_body)
+
+    assert [%AccessToken{id: ^access_token, user_id: ^identifier}] = Repo.all(AccessToken)
+    assert [%RefreshToken{id: ^refresh_token, user_id: ^identifier}] = Repo.all(RefreshToken)
 
     params = %{access_token: access_token}
     conn = send_json_req(:post, "/validate", params)
